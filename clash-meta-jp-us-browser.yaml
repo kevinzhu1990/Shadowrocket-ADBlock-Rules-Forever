@@ -1,0 +1,119 @@
+# Clash.Meta / Mihomo profile
+# macOS: Clash Verge Rev
+# iPhone: any iOS client that supports Clash.Meta/Mihomo YAML
+# IMPORTANT: replace the proxy-provider URL below with your own subscription URL.
+
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: info
+ipv6: true
+unified-delay: true
+tcp-concurrent: true
+find-process-mode: off
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+proxy-providers:
+  我的订阅:
+    type: http
+    # Replace this value with your own Clash-compatible subscription URL.
+    url: "REPLACE_WITH_YOUR_SUBSCRIPTION_URL"
+    path: ./proxy_providers/my_subscription.yaml
+    interval: 86400
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 600
+
+proxy-groups:
+  - name: 日本美国优选
+    type: url-test
+    use:
+      - 我的订阅
+    filter: "(?i)日本|Japan|JP|东京|大阪|美国|United States|US|USA|洛杉矶|西雅图|芝加哥|纽约"
+    url: https://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 50
+    timeout: 5000
+
+  - name: PROXY
+    type: select
+    proxies:
+      - 日本美国优选
+      - DIRECT
+    use:
+      - 我的订阅
+
+  - name: AI-日本美国
+    type: select
+    proxies:
+      - 日本美国优选
+
+rule-providers:
+  private:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/private.txt
+    path: ./rule_providers/private.yaml
+    interval: 86400
+  direct:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt
+    path: ./rule_providers/direct.yaml
+    interval: 86400
+  proxy:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/proxy.txt
+    path: ./rule_providers/proxy.yaml
+    interval: 86400
+  cncidr:
+    type: http
+    behavior: ipcidr
+    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cncidr.txt
+    path: ./rule_providers/cncidr.yaml
+    interval: 86400
+
+rules:
+  # AI and international services: Japan/US only, never Hong Kong.
+  - DOMAIN-SUFFIX,chatgpt.com,AI-日本美国
+  - DOMAIN-SUFFIX,openai.com,AI-日本美国
+  - DOMAIN-SUFFIX,auth.openai.com,AI-日本美国
+  - DOMAIN-SUFFIX,oaistatic.com,AI-日本美国
+  - DOMAIN-SUFFIX,oaiusercontent.com,AI-日本美国
+  - DOMAIN-SUFFIX,sora.com,AI-日本美国
+  - DOMAIN-SUFFIX,gemini.google.com,AI-日本美国
+  - DOMAIN-SUFFIX,ai.google.dev,AI-日本美国
+  - DOMAIN-SUFFIX,googleapis.com,AI-日本美国
+  - DOMAIN-SUFFIX,googleusercontent.com,AI-日本美国
+  - DOMAIN-SUFFIX,gstatic.com,AI-日本美国
+  - DOMAIN-SUFFIX,claude.ai,AI-日本美国
+  - DOMAIN-SUFFIX,anthropic.com,AI-日本美国
+  - DOMAIN-SUFFIX,perplexity.ai,AI-日本美国
+  - DOMAIN-SUFFIX,grok.com,AI-日本美国
+  - DOMAIN-SUFFIX,x.ai,AI-日本美国
+  - DOMAIN,copilot.microsoft.com,AI-日本美国
+  - DOMAIN-SUFFIX,character.ai,AI-日本美国
+  - DOMAIN-SUFFIX,poe.com,AI-日本美国
+  - DOMAIN-SUFFIX,midjourney.com,AI-日本美国
+
+  # YouTube and media delivery domains: Japan/US only.
+  - DOMAIN-SUFFIX,youtube.com,AI-日本美国
+  - DOMAIN-SUFFIX,youtu.be,AI-日本美国
+  - DOMAIN-SUFFIX,youtube-nocookie.com,AI-日本美国
+  - DOMAIN-SUFFIX,ytimg.com,AI-日本美国
+  - DOMAIN-SUFFIX,googlevideo.com,AI-日本美国
+
+  # LAN/private and mainland China: direct.
+  - RULE-SET,private,DIRECT
+  - RULE-SET,direct,DIRECT
+  - RULE-SET,cncidr,DIRECT,no-resolve
+  - GEOIP,CN,DIRECT
+
+  # Other international destinations: proxy.
+  - RULE-SET,proxy,PROXY
+  - MATCH,PROXY
