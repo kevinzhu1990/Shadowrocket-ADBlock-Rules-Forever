@@ -307,6 +307,18 @@ INTP | Jack of all trades | I use Arch BTW
 
 ![二维码](https://johnshall.github.io/Shadowrocket-ADBlock-Rules-Forever/figure/lazy_group.png)
 
+## 日本/美国优选浏览器分流配置
+
+Chrome 及其他浏览器按国内直连、国外代理分流；ChatGPT、Gemini、YouTube、Claude、Perplexity、Grok、Copilot、Character.AI、Poe、Midjourney 等服务排除香港节点，自动在日本和美国节点中测速优选。
+
+配置地址：<https://raw.githubusercontent.com/kevinzhu1990/Shadowrocket-ADBlock-Rules-Forever/agent/shadowrocket-jp-us-browser/sr_jp_us_browser.conf>
+
+手机可在小火箭中直接扫描下方二维码导入：
+
+![日本/美国优选浏览器分流配置二维码](figure/sr_jp_us_browser.png)
+
+注意：配置文件不包含代理节点和订阅地址，导入后需确保手机已有“日本节点”和“美国节点”分组。
+
 
 ## 鸣谢
 
