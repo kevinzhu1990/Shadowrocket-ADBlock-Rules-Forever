@@ -300,7 +300,7 @@ INTP | Jack of all trades | I use Arch BTW
 - 配置简洁
 - 规则覆盖范围广
 - 国内外常用app单独分流
-- 添加自动切换延迟最低节点类型
+- 所有策略组默认手动选择节点，并过滤香港节点
 - 通过「代理分组」灵活调整流媒体分流策略
 
 规则地址：<https://johnshall.github.io/Shadowrocket-ADBlock-Rules-Forever/lazy_group.conf>
