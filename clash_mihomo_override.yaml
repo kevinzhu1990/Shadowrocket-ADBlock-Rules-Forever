@@ -85,7 +85,7 @@ proxy-groups:
 
   - <<: *foreign_group
     name: 苹果服务
-    proxies: [DIRECT, 手动选择, 台湾节点, 日本节点, 新加坡节点, 韩国节点, 美国节点]
+    proxies: [手动选择, DIRECT, 台湾节点, 日本节点, 新加坡节点, 韩国节点, 美国节点]
 
 rule-providers:
   private: &domain_mrs
